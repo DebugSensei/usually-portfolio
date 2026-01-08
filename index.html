@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ivan Poda — Websites & Bots for Business</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #050505; --bg-secondary: #0a0a0a; --bg-card: #111111;
+            --text-primary: #ffffff; --text-secondary: #94a3b8;
+            --accent-blue: #3b82f6; --accent-green: #10b981; --accent-purple: #8b5cf6;
+            --border-color: #1e1e1e; --font-mono: 'JetBrains Mono', monospace;
+            --font-sans: 'Inter', -apple-system, sans-serif;
+        }
+        html { scroll-behavior: smooth; }
+        
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-blue); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-purple); }
+        * { scrollbar-width: thin; scrollbar-color: var(--accent-blue) var(--bg-secondary); }
+        
+        body {
+            font-family: var(--font-sans); background: var(--bg-primary);
+            background-image: radial-gradient(#1e293b 0.5px, transparent 0.5px);
+            background-size: 32px 32px; color: var(--text-primary);
+            line-height: 1.6; overflow-x: hidden;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .section { padding: 100px 0; }
+        .section-title { font-family: var(--font-mono); font-size: 14px; color: var(--accent-blue); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; }
+        .section-heading { font-size: clamp(32px, 5vw, 48px); font-weight: 700; margin-bottom: 48px; }
+
+        header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 0; background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-color); }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: var(--text-primary); text-decoration: none; letter-spacing: -1px; }
+        .logo span { color: var(--accent-blue); }
+        nav { display: flex; gap: 32px; }
+        nav a { font-size: 14px; color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+        nav a:hover { color: var(--text-primary); }
+        
+        .header-right { display: flex; align-items: center; gap: 16px; }
+        .lang-switcher { display: flex; gap: 4px; }
+        .lang-btn { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-secondary); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-family: var(--font-mono); font-size: 11px; transition: 0.2s; }
+        .lang-btn.active, .lang-btn:hover { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
+        .hire-btn { background: var(--accent-blue); color: white; padding: 10px 24px; border-radius: 8px; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+        .hire-btn:hover { background: var(--accent-purple); }
+
+        .hero { min-height: 100vh; display: flex; align-items: center; padding-top: 80px; }
+        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+        .hero-content h1 { font-size: clamp(40px, 6vw, 64px); font-weight: 700; line-height: 1.1; margin-bottom: 16px; }
+        .hero-content h1 span { 
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); 
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-subtitle { font-size: 20px; color: var(--text-secondary); margin-bottom: 24px; }
+        
+        .status-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 10px 18px; border-radius: 100px; font-family: var(--font-mono); font-size: 12px; color: var(--accent-green); margin-bottom: 32px; white-space: nowrap; }
+        .status-dot { width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
+        .metric-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; text-align: center; backdrop-filter: blur(10px); }
+        .metric-value { font-size: 32px; font-weight: 700; color: var(--accent-blue); font-family: var(--font-mono); }
+        .metric-label { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+
+        .visual-block { background: #141414; border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8); }
+        .visual-header { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: #1a1a1a; border-bottom: 1px solid var(--border-color); }
+        .visual-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .visual-dot.red { background: #ef4444; } .visual-dot.yellow { background: #eab308; } .visual-dot.green { background: #22c55e; }
+        .visual-body { padding: 32px; min-height: 320px; display: flex; flex-direction: column; justify-content: center; }
+        .visual-item { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border-color); }
+        .visual-item:last-child { border-bottom: none; }
+        .visual-icon { width: 40px; height: 40px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .visual-icon svg { width: 20px; height: 20px; color: var(--accent-blue); }
+        .visual-text h4 { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+        .visual-text p { font-size: 13px; color: var(--text-secondary); }
+
+        .services { background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(5px); }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 32px; }
+        .service-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 32px; transition: all 0.3s; position: relative; }
+        .service-card:hover { transform: translateY(-4px); border-color: var(--accent-blue); box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.2); }
+        .service-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+        .service-name { font-size: 24px; font-weight: 700; }
+        .service-tag { font-family: var(--font-mono); font-size: 11px; color: var(--accent-green); background: rgba(16, 185, 129, 0.1); padding: 4px 10px; border-radius: 100px; }
+        .service-desc { color: var(--text-secondary); margin-bottom: 24px; font-size: 15px; line-height: 1.7; }
+        .service-features { list-style: none; }
+        .service-features li { position: relative; padding-left: 20px; margin-bottom: 8px; color: var(--text-secondary); font-size: 14px; }
+        .service-features li::before { content: '→'; position: absolute; left: 0; color: var(--accent-green); }
+
+        .process-list { position: relative; padding-left: 32px; max-width: 800px; }
+        .process-list::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--border-color); }
+        .process-item { position: relative; padding-bottom: 48px; }
+        .process-item::before { content: ''; position: absolute; left: -32px; top: 6px; width: 16px; height: 16px; border-radius: 50%; background: var(--bg-primary); border: 3px solid var(--accent-blue); }
+        .process-item:first-child::before { border-color: var(--accent-green); box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2); }
+        .process-num { font-family: var(--font-mono); font-size: 13px; color: var(--accent-blue); margin-bottom: 4px; }
+        .process-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+        .process-desc { color: var(--text-secondary); font-size: 15px; max-width: 600px; }
+
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 32px; }
+        .project-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 32px; transition: all 0.3s; position: relative; }
+        .project-card:hover { transform: translateY(-4px); border-color: var(--accent-blue); box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.2); }
+        .project-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .project-name { font-size: 24px; font-weight: 700; }
+        .project-role { font-family: var(--font-mono); font-size: 11px; color: var(--accent-green); background: rgba(16, 185, 129, 0.1); padding: 2px 10px; border-radius: 100px; margin-left: 12px; }
+        .project-desc { color: var(--text-secondary); margin-bottom: 24px; font-size: 15px; }
+        .tag { font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); background: var(--bg-secondary); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border-color); margin-right: 4px; margin-bottom: 8px; display: inline-block; }
+        .project-link { color: var(--text-secondary); transition: color 0.2s; }
+        .project-link:hover { color: var(--accent-blue); }
+
+        .faq-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 16px; }
+        .faq-item { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; }
+        .faq-question { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: var(--text-primary); }
+        .faq-answer { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+        .contact { text-align: center; }
+        .contact-heading { font-size: clamp(32px, 5vw, 56px); font-weight: 700; margin-bottom: 16px; }
+        .contact-desc { color: var(--text-secondary); font-size: 18px; margin-bottom: 40px; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 28px; border-radius: 10px; font-weight: 600; text-decoration: none; transition: all 0.2s; cursor: pointer; border: 1px solid transparent; }
+        .btn-primary { background: var(--accent-blue); color: white; }
+        .btn-secondary { background: var(--bg-card); color: white; border: 1px solid var(--border-color); }
+        .btn:hover { transform: translateY(-2px); border-color: var(--accent-blue); }
+        .contact-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+        .dev-banner { background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1)); border: 1px solid var(--border-color); border-radius: 16px; padding: 48px; display: flex; justify-content: space-between; align-items: center; gap: 32px; }
+        .dev-banner-label { font-family: var(--font-mono); font-size: 13px; color: var(--accent-purple); margin-bottom: 12px; }
+        .dev-banner-title { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
+        .dev-banner-desc { color: var(--text-secondary); font-size: 15px; max-width: 600px; }
+        .dev-banner .btn { white-space: nowrap; }
+        @media (max-width: 768px) { .dev-banner { flex-direction: column; text-align: center; } .dev-banner-desc { max-width: 100%; } }
+
+        footer { padding: 40px 0; border-top: 1px solid var(--border-color); text-align: center; font-family: var(--font-mono); font-size: 13px; color: var(--text-secondary); }
+
+        .fade-in { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 900px) { 
+            .hero-grid { grid-template-columns: 1fr; } 
+            nav { display: none; } 
+            .metrics-grid { grid-template-columns: 1fr; }
+            .faq-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo">Ivan<span>_</span>Poda</a>
+            <nav>
+                <a href="#services" data-i18n="nav_services">Services</a>
+                <a href="#projects" data-i18n="nav_projects">Projects</a>
+                <a href="#contact" data-i18n="nav_contact">Contact</a>
+            </nav>
+            <div class="header-right">
+                <div class="lang-switcher">
+                    <button class="lang-btn active" onclick="switchLang('en')">EN</button>
+                    <button class="lang-btn" onclick="switchLang('pl')">PL</button>
+                    <button class="lang-btn" onclick="switchLang('ru')">RU</button>
+                </div>
+                <a href="https://t.me/Ivan_Poda" class="hire-btn" data-i18n="header_cta">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <div class="status-badge">
+                        <span class="status-dot"></span>
+                        <span data-i18n="status">AVAILABLE FOR WORK</span>
+                    </div>
+                    <h1 data-i18n="hero_title">Websites & bots for <span>your business</span></h1>
+                    <p class="hero-subtitle" data-i18n="hero_subtitle">Helping small businesses get more clients online</p>
+                    <p style="color: var(--text-secondary); max-width: 480px; margin-bottom: 30px;" data-i18n="hero_desc">
+                        I create websites that work for you 24/7. Automate routine with Telegram bots. No tech jargon — just results.
+                    </p>
+                    <div class="metrics-grid">
+                        <div class="metric-card"><div class="metric-value">50+</div><div class="metric-label" data-i18n="stat1">Projects</div></div>
+                        <div class="metric-card"><div class="metric-value">3</div><div class="metric-label" data-i18n="stat2">Days Average</div></div>
+                        <div class="metric-card"><div class="metric-value">24/7</div><div class="metric-label" data-i18n="stat3">Online</div></div>
+                    </div>
+                </div>
+                <div class="visual-block">
+                    <div class="visual-header">
+                        <span class="visual-dot red"></span>
+                        <span class="visual-dot yellow"></span>
+                        <span class="visual-dot green"></span>
+                    </div>
+                    <div class="visual-body">
+                        <div class="visual-item">
+                            <div class="visual-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+                            </div>
+                            <div class="visual-text">
+                                <h4 data-i18n="vis1_t">Landing Page</h4>
+                                <p data-i18n="vis1_d">Clients will find you on Google</p>
+                            </div>
+                        </div>
+                        <div class="visual-item">
+                            <div class="visual-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                            </div>
+                            <div class="visual-text">
+                                <h4 data-i18n="vis2_t">Online Store</h4>
+                                <p data-i18n="vis2_d">Sales on autopilot</p>
+                            </div>
+                        </div>
+                        <div class="visual-item">
+                            <div class="visual-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                            </div>
+                            <div class="visual-text">
+                                <h4 data-i18n="vis3_t">Telegram Bot</h4>
+                                <p data-i18n="vis3_d">Booking and order automation</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section services" id="services">
+        <div class="container">
+            <p class="section-title" data-i18n="services_label">// Services</p>
+            <h2 class="section-heading fade-in" data-i18n="services_title">What I Do</h2>
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <div class="service-header">
+                        <h3 class="service-name" data-i18n="s1_name">Landing Page</h3>
+                        <span class="service-tag">Landing</span>
+                    </div>
+                    <p class="service-desc" data-i18n="s1_desc">Professional page for your business. Clients see who you are, what you offer and how to contact you.</p>
+                    <ul class="service-features">
+                        <li data-i18n="s1_f1">Responsive design for all devices</li>
+                        <li data-i18n="s1_f2">Fast page loading</li>
+                        <li data-i18n="s1_f3">Contact form</li>
+                        <li data-i18n="s1_f4">SEO optimization</li>
+                    </ul>
+                </div>
+
+                <div class="service-card fade-in">
+                    <div class="service-header">
+                        <h3 class="service-name" data-i18n="s2_name">Online Store</h3>
+                        <span class="service-tag">E-commerce</span>
+                    </div>
+                    <p class="service-desc" data-i18n="s2_desc">Full-featured store with product catalog. Clients browse, add to cart and pay online.</p>
+                    <ul class="service-features">
+                        <li data-i18n="s2_f1">Catalog with filters and search</li>
+                        <li data-i18n="s2_f2">Cart and checkout</li>
+                        <li data-i18n="s2_f3">Online payment integration</li>
+                        <li data-i18n="s2_f4">Order management panel</li>
+                    </ul>
+                </div>
+
+                <div class="service-card fade-in">
+                    <div class="service-header">
+                        <h3 class="service-name" data-i18n="s3_name">Telegram Bot</h3>
+                        <span class="service-tag">Automation</span>
+                    </div>
+                    <p class="service-desc" data-i18n="s3_desc">Automates routine: client booking, order processing, answering FAQs. Works without breaks.</p>
+                    <ul class="service-features">
+                        <li data-i18n="s3_f1">Online service booking</li>
+                        <li data-i18n="s3_f2">Order processing</li>
+                        <li data-i18n="s3_f3">Auto-replies and notifications</li>
+                        <li data-i18n="s3_f4">Integration with your systems</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="process">
+        <div class="container">
+            <p class="section-title" data-i18n="process_label">// Process</p>
+            <h2 class="section-heading fade-in" data-i18n="process_title">How We Work</h2>
+            <div class="process-list">
+                <div class="process-item fade-in">
+                    <p class="process-num">01</p>
+                    <h3 class="process-title" data-i18n="p1_title">Discuss the Task</h3>
+                    <p class="process-desc" data-i18n="p1_desc">You tell about your business and what you want. I ask questions and suggest solutions.</p>
+                </div>
+                <div class="process-item fade-in">
+                    <p class="process-num">02</p>
+                    <h3 class="process-title" data-i18n="p2_title">Agree on Details</h3>
+                    <p class="process-desc" data-i18n="p2_desc">Define structure, functionality and timeline. I show examples of similar projects.</p>
+                </div>
+                <div class="process-item fade-in">
+                    <p class="process-num">03</p>
+                    <h3 class="process-title" data-i18n="p3_title">Development</h3>
+                    <p class="process-desc" data-i18n="p3_desc">I create the project, show intermediate results. Make edits based on your feedback.</p>
+                </div>
+                <div class="process-item fade-in">
+                    <p class="process-num">04</p>
+                    <h3 class="process-title" data-i18n="p4_title">Launch</h3>
+                    <p class="process-desc" data-i18n="p4_desc">Publish the website. Explain how to use it. Support after launch.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section services" id="projects">
+        <div class="container">
+            <p class="section-title" data-i18n="projects_label">// Portfolio</p>
+            <h2 class="section-heading fade-in" data-i18n="projects_title">Production Systems</h2>
+            <div class="projects-grid">
+                <div class="project-card fade-in">
+                    <div class="project-header">
+                        <h3 class="project-name">mixora.market <span class="project-role">E-commerce</span></h3>
+                        <a href="https://mixora.market" target="_blank" class="project-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                        </a>
+                    </div>
+                    <p class="project-desc" data-i18n="proj1_desc">AI-powered B2C marketplace. Automated flow from design generation to manufacturing and delivery.</p>
+                    <div class="project-tags">
+                        <span class="tag">Online Store</span>
+                        <span class="tag">AI Integration</span>
+                        <span class="tag">Payment System</span>
+                    </div>
+                </div>
+
+                <div class="project-card fade-in">
+                    <div class="project-header">
+                        <h3 class="project-name">aivilon.com <span class="project-role">Platform</span></h3>
+                        <a href="https://www.aivilon.com/" target="_blank" class="project-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                        </a>
+                    </div>
+                    <p class="project-desc" data-i18n="proj2_desc">Real-time analytics platform for retail. Processing video streams into actionable business insights.</p>
+                    <div class="project-tags">
+                        <span class="tag">Dashboard</span>
+                        <span class="tag">Analytics</span>
+                        <span class="tag">Real-time</span>
+                    </div>
+                </div>
+
+                <div class="project-card fade-in">
+                    <div class="project-header">
+                        <h3 class="project-name">KanGram <span class="project-role">Telegram Bot</span></h3>
+                        <a href="https://t.me/KanGramBot" target="_blank" class="project-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                        </a>
+                    </div>
+                    <p class="project-desc" data-i18n="proj3_desc">Full-featured task tracker for Telegram groups. Role-based access, media attachments, custom statuses.</p>
+                    <div class="project-tags">
+                        <span class="tag">Telegram Bot</span>
+                        <span class="tag">Task Management</span>
+                        <span class="tag">Automation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="faq">
+        <div class="container">
+            <p class="section-title" data-i18n="faq_label">// FAQ</p>
+            <h2 class="section-heading fade-in" data-i18n="faq_title">Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item fade-in">
+                    <h4 class="faq-question" data-i18n="faq1_q">How long does it take to build a website?</h4>
+                    <p class="faq-answer" data-i18n="faq1_a">Simple landing page — 2-3 days. Online store — about a week. Exact timeline after discussing your specific requirements.</p>
+                </div>
+                <div class="faq-item fade-in">
+                    <h4 class="faq-question" data-i18n="faq2_q">Do I need technical knowledge?</h4>
+                    <p class="faq-answer" data-i18n="faq2_a">No. I handle everything. You just tell me about your business and provide materials: texts, photos.</p>
+                </div>
+                <div class="faq-item fade-in">
+                    <h4 class="faq-question" data-i18n="faq3_q">Are there monthly fees?</h4>
+                    <p class="faq-answer" data-i18n="faq3_a">Not for development. Only hosting and domain — standard costs for maintaining any website.</p>
+                </div>
+                <div class="faq-item fade-in">
+                    <h4 class="faq-question" data-i18n="faq4_q">Can I edit the content myself?</h4>
+                    <p class="faq-answer" data-i18n="faq4_a">Yes, I'll show you how. Small edits in the first month are free.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section contact" id="contact">
+        <div class="container">
+            <p class="section-title fade-in" data-i18n="contact_label">// Contact</p>
+            <h2 class="contact-heading fade-in" data-i18n="contact_title">Let's Discuss Your Project</h2>
+            <p class="contact-desc fade-in" data-i18n="contact_desc">Write on Telegram — I'll reply within 15 minutes. Free consultation.</p>
+            <div class="contact-buttons fade-in">
+                <a href="https://t.me/Ivan_Poda" target="_blank" class="btn btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                    Telegram
+                </a>
+                <a href="mailto:debugsenseirbx@gmail.com" class="btn btn-secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    Email
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="about-dev">
+        <div class="container">
+            <div class="dev-banner fade-in">
+                <div class="dev-banner-content">
+                    <p class="dev-banner-label" data-i18n="dev_label">// For Technical Teams</p>
+                    <h3 class="dev-banner-title" data-i18n="dev_title">Looking for a Backend Engineer?</h3>
+                    <p class="dev-banner-desc" data-i18n="dev_desc">5+ years building scalable systems. Python, Go, Node.js, Kubernetes. Check out my technical portfolio with architecture deep-dives.</p>
+                </div>
+                <a href="https://portfolio-debugsensei.vercel.app/" target="_blank" class="btn btn-primary" data-i18n="dev_btn">View Technical Portfolio</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p><span>ivan_poda@2026</span></p>
+        </div>
+    </footer>
+
+    <script>
+        const translations = {
+            en: {
+                nav_services: "Services", nav_projects: "Projects", nav_contact: "Contact",
+                header_cta: "Contact", status: "AVAILABLE FOR WORK",
+                hero_title: "Websites & bots for <span>your business</span>",
+                hero_subtitle: "Helping small businesses get more clients online",
+                hero_desc: "I create websites that work for you 24/7. Automate routine with Telegram bots. No tech jargon — just results.",
+                stat1: "Projects", stat2: "Days Average", stat3: "Online",
+                vis1_t: "Landing Page", vis1_d: "Clients will find you on Google",
+                vis2_t: "Online Store", vis2_d: "Sales on autopilot",
+                vis3_t: "Telegram Bot", vis3_d: "Booking and order automation",
+                services_label: "// Services", services_title: "What I Do",
+                s1_name: "Landing Page", s1_desc: "Professional page for your business. Clients see who you are, what you offer and how to contact you.",
+                s1_f1: "Responsive design for all devices", s1_f2: "Fast page loading", s1_f3: "Contact form", s1_f4: "SEO optimization",
+                s2_name: "Online Store", s2_desc: "Full-featured store with product catalog. Clients browse, add to cart and pay online.",
+                s2_f1: "Catalog with filters and search", s2_f2: "Cart and checkout", s2_f3: "Online payment integration", s2_f4: "Order management panel",
+                s3_name: "Telegram Bot", s3_desc: "Automates routine: client booking, order processing, answering FAQs. Works without breaks.",
+                s3_f1: "Online service booking", s3_f2: "Order processing", s3_f3: "Auto-replies and notifications", s3_f4: "Integration with your systems",
+                process_label: "// Process", process_title: "How We Work",
+                p1_title: "Discuss the Task", p1_desc: "You tell about your business and what you want. I ask questions and suggest solutions.",
+                p2_title: "Agree on Details", p2_desc: "Define structure, functionality and timeline. I show examples of similar projects.",
+                p3_title: "Development", p3_desc: "I create the project, show intermediate results. Make edits based on your feedback.",
+                p4_title: "Launch", p4_desc: "Publish the website. Explain how to use it. Support after launch.",
+                projects_label: "// Portfolio", projects_title: "Production Systems",
+                proj1_desc: "AI-powered B2C marketplace. Automated flow from design generation to manufacturing and delivery.",
+                proj2_desc: "Real-time analytics platform for retail. Processing video streams into actionable business insights.",
+                proj3_desc: "Full-featured task tracker for Telegram groups. Role-based access, media attachments, custom statuses.",
+                faq_label: "// FAQ", faq_title: "Frequently Asked Questions",
+                faq1_q: "How long does it take to build a website?", faq1_a: "Simple landing page — 2-3 days. Online store — about a week. Exact timeline after discussing your specific requirements.",
+                faq2_q: "Do I need technical knowledge?", faq2_a: "No. I handle everything. You just tell me about your business and provide materials: texts, photos.",
+                faq3_q: "Are there monthly fees?", faq3_a: "Not for development. Only hosting and domain — standard costs for maintaining any website.",
+                faq4_q: "Can I edit the content myself?", faq4_a: "Yes, I'll show you how. Small edits in the first month are free.",
+                contact_label: "// Contact", contact_title: "Let's Discuss Your Project", contact_desc: "Write on Telegram — I'll reply within 15 minutes. Free consultation.",
+                dev_label: "// For Technical Teams", dev_title: "Looking for a Backend Engineer?", dev_desc: "5+ years building scalable systems. Python, Go, Node.js, Kubernetes. Check out my technical portfolio with architecture deep-dives.", dev_btn: "View Technical Portfolio"
+            },
+            pl: {
+                nav_services: "Usługi",
+                nav_projects: "Projekty",
+                nav_contact: "Kontakt",
+
+                header_cta: "Kontakt",
+                status: "Aktualnie przyjmuję zlecenia",
+
+                hero_title: "Strony internetowe i boty dla <span>Twojego biznesu</span>",
+                hero_subtitle: "Pomagam małym firmom pozyskiwać więcej klientów w internecie",
+                hero_desc: "Tworzę strony, które pracują dla Ciebie 24/7. Automatyzuję procesy za pomocą botów Telegram. Bez technicznego żargonu — liczą się efekty.",
+
+                stat1: "Zrealizowanych projektów",
+                stat2: "Średni czas realizacji (dni)",
+                stat3: "Dostępność 24/7",
+
+                vis1_t: "Strona firmowa",
+                vis1_d: "Twoja firma będzie widoczna w Google",
+
+                vis2_t: "Sklep internetowy",
+                vis2_d: "Sprzedaż działająca na autopilocie",
+
+                vis3_t: "Bot Telegram",
+                vis3_d: "Automatyzacja rezerwacji i zamówień",
+
+                services_label: "// Usługi",
+                services_title: "Czym się zajmuję",
+
+                s1_name: "Strona firmowa",
+                s1_desc: "Profesjonalna strona internetowa dla Twojej firmy. Klienci szybko dowiedzą się, kim jesteś, co oferujesz i jak mogą się z Tobą skontaktować.",
+                s1_f1: "Responsywny design na wszystkie urządzenia",
+                s1_f2: "Szybkie ładowanie strony",
+                s1_f3: "Formularz kontaktowy",
+                s1_f4: "Podstawowa optymalizacja SEO",
+
+                s2_name: "Sklep internetowy",
+                s2_desc: "Nowoczesny sklep online z katalogiem produktów. Klienci mogą przeglądać ofertę, dodawać produkty do koszyka i płacić online.",
+                s2_f1: "Katalog produktów z filtrowaniem i wyszukiwaniem",
+                s2_f2: "Koszyk i proces składania zamówienia",
+                s2_f3: "Integracja płatności online",
+                s2_f4: "Panel do zarządzania zamówieniami",
+
+                s3_name: "Bot Telegram",
+                s3_desc: "Automatyzuje codzienne zadania: rezerwacje usług, przyjmowanie zamówień oraz odpowiedzi na najczęstsze pytania. Działa 24/7.",
+                s3_f1: "Rezerwacje usług online",
+                s3_f2: "Przyjmowanie zamówień",
+                s3_f3: "Automatyczne odpowiedzi i powiadomienia",
+                s3_f4: "Integracja z Twoimi systemami",
+
+                process_label: "// Proces",
+                process_title: "Jak wygląda współpraca",
+
+                p1_title: "Analiza potrzeb",
+                p1_desc: "Rozmawiamy o Twoim biznesie i oczekiwaniach. Zadaję pytania i proponuję najlepsze rozwiązanie.",
+
+                p2_title: "Ustalenie szczegółów",
+                p2_desc: "Określamy strukturę strony, funkcjonalności oraz terminy realizacji. Pokazuję przykłady podobnych projektów.",
+
+                p3_title: "Tworzenie i wdrożenie",
+                p3_desc: "Realizuję projekt i na bieżąco pokazuję postępy. Wprowadzam poprawki na podstawie Twoich uwag.",
+
+                p4_title: "Uruchomienie projektu",
+                p4_desc: "Publikujemy stronę lub system. Pokazuję, jak z niego korzystać, oraz zapewniam wsparcie po wdrożeniu.",
+
+                projects_label: "// Portfolio",
+                projects_title: "Zrealizowane projekty",
+
+                proj1_desc: "Platforma marketplace B2C z wykorzystaniem AI. W pełni zautomatyzowany proces od generowania projektu po produkcję i dostawę.",
+                proj2_desc: "Platforma analityczna w czasie rzeczywistym dla handlu detalicznego. Analiza strumieni wideo przekładana na konkretne wnioski biznesowe.",
+                proj3_desc: "Rozbudowany system do zarządzania zadaniami dla grup Telegram. Role użytkowników, załączniki multimediów i niestandardowe statusy.",
+
+                faq_label: "// FAQ",
+                faq_title: "Najczęściej zadawane pytania",
+
+                faq1_q: "Jak długo trwa stworzenie strony?",
+                faq1_a: "Prosta strona internetowa — 2–3 dni. Sklep online — około tygodnia. Dokładny termin ustalamy po omówieniu wymagań.",
+
+                faq2_q: "Czy muszę znać się na technologii?",
+                faq2_a: "Nie. Zajmuję się wszystkim. Ty opowiadasz o swoim biznesie i dostarczasz materiały: teksty oraz zdjęcia.",
+
+                faq3_q: "Czy są jakieś miesięczne opłaty?",
+                faq3_a: "Nie za wykonanie projektu. Jedynymi stałymi kosztami są hosting i domena.",
+
+                faq4_q: "Czy mogę samodzielnie edytować treści?",
+                faq4_a: "Tak. Pokażę Ci, jak to robić. Drobne poprawki w pierwszym miesiącu są darmowe.",
+
+                contact_label: "// Kontakt",
+                contact_title: "Porozmawiajmy o Twoim projekcie",
+                contact_desc: "Napisz do mnie na Telegramie — odpowiem w ciągu 15 minut. Konsultacja jest bezpłatna.",
+
+                dev_label: "// Dla zespołów technicznych",
+                dev_title: "Szukasz Backend Developera?",
+                dev_desc: "Ponad 5 lat doświadczenia w budowaniu skalowalnych systemów. Python, Go, Node.js, Kubernetes. Zobacz moje techniczne portfolio wraz z analizą architektury.",
+                dev_btn: "Zobacz portfolio techniczne"
+                },
+
+            ru: {
+                nav_services: "Услуги", nav_projects: "Проекты", nav_contact: "Контакт",
+                header_cta: "Написать", status: "ПРИНИМАЮ ЗАКАЗЫ",
+                hero_title: "Сайты и боты для <span>вашего бизнеса</span>",
+                hero_subtitle: "Помогаю малому бизнесу получать больше клиентов онлайн",
+                hero_desc: "Создаю сайты, которые работают на вас 24/7. Автоматизирую рутину Telegram-ботами. Без сложных слов — только результат.",
+                stat1: "Проектов", stat2: "Дня в среднем", stat3: "На связи",
+                vis1_t: "Сайт-визитка", vis1_d: "Клиенты найдут вас в Google",
+                vis2_t: "Интернет-магазин", vis2_d: "Продажи на автопилоте",
+                vis3_t: "Telegram бот", vis3_d: "Автоматизация записи и заказов",
+                services_label: "// Услуги", services_title: "Что я делаю",
+                s1_name: "Сайт-визитка", s1_desc: "Профессиональная страница для вашего бизнеса. Клиенты видят кто вы, что предлагаете и как связаться.",
+                s1_f1: "Адаптивный дизайн под все устройства", s1_f2: "Быстрая загрузка страниц", s1_f3: "Форма обратной связи", s1_f4: "Оптимизация для поисковиков",
+                s2_name: "Интернет-магазин", s2_desc: "Полноценный магазин с каталогом товаров. Клиенты выбирают, добавляют в корзину и оплачивают онлайн.",
+                s2_f1: "Каталог с фильтрами и поиском", s2_f2: "Корзина и оформление заказа", s2_f3: "Интеграция онлайн-оплаты", s2_f4: "Панель управления заказами",
+                s3_name: "Telegram бот", s3_desc: "Автоматизирует рутину: запись клиентов, приём заказов, ответы на вопросы. Работает без перерывов.",
+                s3_f1: "Онлайн-запись на услуги", s3_f2: "Приём и обработка заказов", s3_f3: "Автоответы и уведомления", s3_f4: "Интеграция с вашими системами",
+                process_label: "// Процесс", process_title: "Как мы работаем",
+                p1_title: "Обсуждаем задачу", p1_desc: "Вы рассказываете о бизнесе и что хотите получить. Я задаю вопросы и предлагаю решение.",
+                p2_title: "Согласовываем детали", p2_desc: "Определяем структуру, функционал и сроки. Показываю примеры похожих проектов.",
+                p3_title: "Разработка", p3_desc: "Создаю проект, показываю промежуточные результаты. Вношу правки по вашим комментариям.",
+                p4_title: "Запуск", p4_desc: "Публикуем сайт в интернете. Объясняю как пользоваться. Поддержка после запуска.",
+                projects_label: "// Портфолио", projects_title: "Реализованные проекты",
+                proj1_desc: "B2C маркетплейс с ИИ. Автоматизированный процесс от генерации дизайна до производства и доставки.",
+                proj2_desc: "Платформа аналитики в реальном времени для ритейла. Обработка видеопотоков в бизнес-инсайты.",
+                proj3_desc: "Полноценный трекер задач для Telegram-групп. Ролевой доступ, медиа-вложения, кастомные статусы.",
+                faq_label: "// FAQ", faq_title: "Частые вопросы",
+                faq1_q: "Как долго делать сайт?", faq1_a: "Простой сайт — 2-3 дня. Магазин — около недели. Точные сроки после обсуждения ваших требований.",
+                faq2_q: "Нужно ли разбираться в технике?", faq2_a: "Нет. Я всё сделаю сам. Вам нужно только рассказать о бизнесе и прислать материалы: тексты, фото.",
+                faq3_q: "Есть ли ежемесячные платежи?", faq3_a: "За разработку — нет. Только хостинг и домен — стандартные расходы для любого сайта.",
+                faq4_q: "Можно ли самому менять контент?", faq4_a: "Да, покажу как. Мелкие правки в первый месяц — бесплатно.",
+                contact_label: "// Контакт", contact_title: "Давайте обсудим проект", contact_desc: "Напишите в Telegram — отвечу в течение 15 минут. Консультация бесплатно.",
+                dev_label: "// Для технических команд", dev_title: "Ищете Backend-разработчика?", dev_desc: "5+ лет создания масштабируемых систем. Python, Go, Node.js, Kubernetes. Посмотрите техническое портфолио с разбором архитектуры.", dev_btn: "Техническое портфолио"
+            }
+        };
+
+        function switchLang(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) el.innerHTML = translations[lang][key];
+            });
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.innerText.toLowerCase() === lang);
+            });
+        }
+
+        switchLang('en');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
